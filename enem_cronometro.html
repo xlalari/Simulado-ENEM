@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulado ENEM - Contagem Oficial</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+            background-color: #f4f4f4;
+        }
+        #message {
+            font-size: 36px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.3);
+            display: block;
+            z-index: 1000;
+            width: 80%;
+            max-width: 400px;
+        }
+        #popup button {
+            display: block;
+            margin: 10px auto;
+        }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: block;
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <div id="overlay"></div>
+    <div id="popup">
+        <h2>Como funciona:</h2>
+        <p>- A contagem regressiva atualiza automaticamente a cada 30 minutos.</p>
+        <p>- Avisos aparecerão ao longo do tempo para simular a experiência do ENEM.</p>
+        <button onclick="closePopup()">Entendi</button>
+    </div>
+
+    <h1>Simulado ENEM - Contagem Oficial</h1>
+    <p>Escolha abaixo o tempo do simulado:</p>
+    <button onclick="startSimulation(19800)">5h30 (Dia 1)</button>
+    <button onclick="startSimulation(18000)">5h (Dia 2)</button>
+
+    <div id="message">Selecione um tempo para começar</div>
+
+    <script>
+        let timeRemaining;
+        let interval;
+
+        function closePopup() {
+            document.getElementById("popup").style.display = "none";
+            document.getElementById("overlay").style.display = "none";
+        }
+
+        function startSimulation(seconds) {
+            document.querySelectorAll("button").forEach(btn => btn.style.display = "none"); // Esconde os botões
+            timeRemaining = seconds;
+            updateMessage();
+            interval = setInterval(updateSimulation, 1800000); // Atualiza a cada 30 minutos (1800000 ms)
+        }
+
+        function updateSimulation() {
+            timeRemaining -= 1800; // Reduz 30 minutos
+            updateMessage();
+
+            if (timeRemaining === 18000) {
+                alert("Restam 5 horas!");
+            }
+            if (timeRemaining === 16200) {
+                alert("Restam 4 horas e 30 minutos!");
+            }
+            if (timeRemaining === 14400) {
+                alert("Restam 4 horas!");
+            }
+            if (timeRemaining === 12600) {
+                alert("Restam 3 horas e 30 minutos!");
+            }
+            if (timeRemaining === 1800) {
+                alert("Faltam 30 minutos para o fim da prova!");
+            }
+            
+            if (timeRemaining <= 0) {
+                clearInterval(interval);
+                document.getElementById("message").innerText = "Tempo esgotado! Entregue sua prova.";
+                alert("Tempo esgotado! Entregue sua prova."); // Alerta final
+                document.body.style.backgroundColor = "#ff0000"; // Alerta visual (vermelho)
+            }
+        }
+
+        function updateMessage() {
+            let hours = Math.floor(timeRemaining / 3600);
+            let minutes = Math.floor((timeRemaining % 3600) / 60);
+
+            if (timeRemaining > 0) {
+                document.getElementById("message").innerText = `Tempo restante: ${hours}h ${minutes}min`;
+            }
+        }
+    </script>
+</body>
+</html>
